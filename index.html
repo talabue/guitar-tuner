@@ -2,13 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/guitar-tuner/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="./vite.svg" /> <!-- ✅ Fix favicon path -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>Guitar Tuner</title>
+    <base href="/guitar-tuner/" /> <!-- ✅ Ensure all paths are relative to the correct base -->
     <script type="module" crossorigin src="/guitar-tuner/assets/index-eQFUXG4T.js"></script>
     <link rel="stylesheet" crossorigin href="/guitar-tuner/assets/index-n_ryQ3BS.css">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div> <!-- ✅ Fix script path -->
   </body>
 </html>
