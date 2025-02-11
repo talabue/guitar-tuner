@@ -24,15 +24,15 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioContext, analyze
       analyzer.getByteTimeDomainData(dataArray);
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = "#10b981"; // Green color for the waveform
+      ctx.strokeStyle = "#10b981"; 
       ctx.lineWidth = 2;
 
       ctx.beginPath();
       const sliceWidth = canvas.width / bufferLength;
-      let x = canvas.width / 2; // Start in the middle
+      let x = canvas.width / 2; 
 
       for (let i = 0; i < bufferLength; i++) {
-        const v = dataArray[i] / 128.0; // Normalize to [-1,1] range
+        const v = dataArray[i] / 128.0; 
         const y = v * (canvas.height / 2);
 
         if (i === 0) {
@@ -41,7 +41,7 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioContext, analyze
           ctx.lineTo(x, y);
         }
 
-        x -= sliceWidth; // Move left to create a vertical effect
+        x -= sliceWidth; 
       }
 
       ctx.stroke();

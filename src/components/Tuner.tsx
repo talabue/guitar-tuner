@@ -12,10 +12,7 @@ const Tuner: React.FC = () => {
   const [direction, setDirection] = useState<string>("");
   const [isListening, setIsListening] = useState<boolean>(false);
   const [tunedStrings, setTunedStrings] = useState<boolean[]>(new Array(6).fill(false));
-
-  // The horizontal offset for the pitch indicator
   const [notePosition, setNotePosition] = useState<number>(0);
-
   const audioContextRef = useRef<AudioContext | null>(null);
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const analyzerRef = useRef<AnalyserNode | null>(null);
@@ -72,25 +69,18 @@ const Tuner: React.FC = () => {
 
       if (dir) {
         setDirection(dir);
-        // Show the direction for 3 seconds
         setTimeout(() => {
           setDirection((prev) => (prev === dir && !tunedStrings.includes(true) ? "" : prev));
         }, 3000);
       } else {
-        // in tune => mark string
         markTunedString(note, pitch);
       }
 
-      // Move indicator left/right. Negative -> left, positive -> right
       const closestFreq = getClosestFrequency(note);
       let difference = pitch - closestFreq; 
-      // If difference < 0 => negative offset => move left
-      // If difference > 0 => positive offset => move right
-      // If difference ~ 0 => near center
 
-      // Scale it for minimal movement
       let offset = difference * 0.5;
-      // Clamp offset to -40px ... 40px
+
       offset = Math.max(-40, Math.min(40, offset));
 
       setNotePosition(offset);
@@ -119,24 +109,20 @@ const Tuner: React.FC = () => {
   return (
     <div className={styles.tunerContainer}>
       <h1>Guitar Tuner</h1>
-
-      <div>
-        {/* Vertical Column of Strings */}
+  
+      <div className={styles.stringContainer}>
         {stringsList.map((stringName, i) => (
           <div key={i} className={styles.stringWrapper}>
-            {/* The vertical “string” icon at top */}
             <div
               className={`${styles.vibratingString} ${
                 tunedStrings[i] ? styles.vibrating : ""
               }`}
             ></div>
-
-            {/* The note text in the middle */}
+  
             <p className={tunedStrings[i] ? styles.tunedString : styles.untunedString}>
               {stringName}
             </p>
-
-            {/* Floating note near bottom (left/right offset) */}
+  
             {currentNote === stringName && (
               <div
                 className={`${styles.floatingNote} ${
@@ -152,11 +138,11 @@ const Tuner: React.FC = () => {
           </div>
         ))}
       </div>
-
+  
       <button onClick={startTuning} className={styles.startButton}>
         {isListening ? "Stop Tuning" : "Start Tuning"}
       </button>
-
+  
       {isListening && (
         <AudioVisualizer
           audioContext={audioContextRef.current}
@@ -167,7 +153,6 @@ const Tuner: React.FC = () => {
   );
 };
 
-/** Convert frequency -> note + direction */
 function getNoteFromFrequency(freq: number): { note: string; direction: string } {
   if (freq < 20 || freq > 1200) {
     return { note: "--", direction: "" };
@@ -189,7 +174,6 @@ function getNoteFromFrequency(freq: number): { note: string; direction: string }
   return { note: closestNote, direction };
 }
 
-/** For each open string, the canonical frequency */
 function getClosestFrequency(note: string): number {
   const frequencies: Record<string, number> = {
     "E (low)": 82.41,
