@@ -1,0 +1,160 @@
+.tunerContainer {
+    padding: 1rem;
+  }
+  
+  .tunerTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .tunedStringsContainer {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid white;
+    border-radius: 8px;
+  }
+  
+  .sectionTitle {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .tunedStringsList {
+    display: flex;
+    flex-direction: column; /* Forces vertical layout */
+    align-items: center; /* Center strings */
+    gap: 15px;
+  }
+  
+  
+  .tunedString {
+    color: #10b981;
+    font-weight: bold;
+  }
+  
+  .untunedString {
+    color: white;
+  }
+  
+  .checkmark {
+    margin-left: 0.25rem;
+  }
+  
+  .startButton {
+    padding: 0.5rem 1rem;
+    background-color: #3b82f6;
+    color: white;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .noteDisplay {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .tunedNote {
+    color: #10b981;
+  }
+  
+  .tuningIndicator {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    margin-top: 10px;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .tuneUp {
+    color: #1061b8; /* Blue */
+  }
+  
+  .tuneDown {
+    color: #ef4444; /* Red */
+  }
+  
+  .waveformCanvas {
+    display: block;
+    margin: 0 auto; /* Centers it */
+    border: 2px solid white;
+    background: black;
+  }  
+
+ /* A bigger, more noticeable vibration animation */
+@keyframes vibrate {
+    0%   { transform: translateX(-3px); }
+    25%  { transform: translateX(3px); }
+    50%  { transform: translateX(-2px); }
+    75%  { transform: translateX(2px); }
+    100% { transform: translateX(0px); }
+  }
+  
+  /* Container that holds everything in a row or column */
+  .tunerContainer {
+    padding: 1rem;
+  }
+  
+  /* Each string (vertical) plus label & pitch in a vertical stack */
+  .stringWrapper {
+    position: relative;
+    width: 120px; /* Enough space for label & pitch indicator */
+    height: 180px; /* Enough vertical space for the string plus label below */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    border: 1px solid #fff; /* optional debugging border */
+  }
+  
+  /* The vertical “string” icon at the top */
+  .vibratingString {
+    width: 2px;         /* thin line for the string */
+    height: 100px;      /* tall enough to look like a vertical string */
+    background: #ccc;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Add a bigger amplitude to make it more noticeable */
+  .vibrating {
+    background-color: #10b981; /* green when vibrating/tuned */
+    animation: vibrate 0.2s infinite ease-in-out; /* faster vibration */
+  }
+  
+  /* The note text below the string */
+  .tunedString {
+    color: #10b981; /* green text for tuned strings */
+    font-weight: bold;
+  }
+  .untunedString {
+    color: #fff;
+  }
+  
+  /* The pitch indicator: bigger font, can shift left/right */
+  .floatingNote {
+    position: absolute;
+    bottom: 40px; /* so it appears around the note text area */
+    left: 50%; /* default center horizontally in the stringWrapper */
+    transform: translateX(-50%); /* center by default */
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+  }
+  .inTune {
+    color: #10b981; /* green if in tune */
+  }
+  .outOfTune {
+    color: #facc15; /* yellow if out of tune */
+  }
+  
+  /* The Start/Stop button */
+  .startButton {
+    padding: 0.5rem 1rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+  
