@@ -11,7 +11,9 @@ const Tuner: React.FC = () => {
   const [currentNote, setCurrentNote] = useState<string>("--");
   const [direction, setDirection] = useState<string>("");
   const [isListening, setIsListening] = useState<boolean>(false);
-  const [tunedStrings, setTunedStrings] = useState<boolean[]>(new Array(6).fill(false));
+  const [tunedStrings, setTunedStrings] = useState<boolean[]>(
+    new Array(6).fill(false)
+  );
   const [notePosition, setNotePosition] = useState<number>(0);
   const audioContextRef = useRef<AudioContext | null>(null);
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
@@ -28,15 +30,21 @@ const Tuner: React.FC = () => {
   async function startTuning() {
     if (!isListening) {
       try {
-        micStreamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true });
+        micStreamRef.current = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
         audioContextRef.current = new AudioContext();
-        sourceRef.current = audioContextRef.current.createMediaStreamSource(micStreamRef.current);
+        sourceRef.current = audioContextRef.current.createMediaStreamSource(
+          micStreamRef.current
+        );
 
         analyzerRef.current = audioContextRef.current.createAnalyser();
         analyzerRef.current.fftSize = 4096;
         sourceRef.current.connect(analyzerRef.current);
 
-        yinRef.current = YIN({ sampleRate: audioContextRef.current.sampleRate });
+        yinRef.current = YIN({
+          sampleRate: audioContextRef.current.sampleRate,
+        });
 
         requestAnimationFrame(detectPitch);
         setIsListening(true);
@@ -70,14 +78,16 @@ const Tuner: React.FC = () => {
       if (dir) {
         setDirection(dir);
         setTimeout(() => {
-          setDirection((prev) => (prev === dir && !tunedStrings.includes(true) ? "" : prev));
+          setDirection((prev) =>
+            prev === dir && !tunedStrings.includes(true) ? "" : prev
+          );
         }, 3000);
       } else {
         markTunedString(note, pitch);
       }
 
       const closestFreq = getClosestFrequency(note);
-      let difference = pitch - closestFreq; 
+      let difference = pitch - closestFreq;
 
       let offset = difference * 0.5;
 
@@ -109,55 +119,88 @@ const Tuner: React.FC = () => {
   return (
     <div className={styles.tunerContainer}>
       <h1>Guitar Tuner</h1>
-  
+
       <div className={styles.stringContainer}>
-        {stringsList.map((stringName, i) => (
-          <div key={i} className={styles.stringWrapper}>
-            <div
-              className={`${styles.vibratingString} ${
-                tunedStrings[i] ? styles.vibrating : ""
-              }`}
-            ></div>
-  
-            <p className={tunedStrings[i] ? styles.tunedString : styles.untunedString}>
-              {stringName}
-            </p>
-  
-            {currentNote === stringName && (
+        {stringsList.map((stringName, i) => {
+          const isClosestNote = currentNote === stringName;
+          const isTuned = tunedStrings[i];
+
+          return (
+            <div key={i} className={styles.stringWrapper}>
               <div
-                className={`${styles.floatingNote} ${
-                  direction === "" ? styles.inTune : styles.outOfTune
+                className={`${styles.string} ${
+                  isTuned ? styles.tuned : isClosestNote ? styles.vibrating : ""
                 }`}
-                style={{
-                  transform: `translateX(${notePosition}px)`,
-                }}
+              ></div>
+
+              <p
+                className={`${
+                  isTuned
+                    ? `${styles.tunedString} ${styles.tunedGlow}`
+                    : styles.untunedString
+                }`}
               >
-                {currentNote}
-              </div>
-            )}
-          </div>
-        ))}
+                {stringName}
+              </p>
+
+              {isClosestNote && (
+                <div
+                  className={`${styles.pitchIndicatorContainer} ${
+                    direction === "" ? styles.inTuneContainer : ""
+                  }`}
+                  style={{ transform: `translateX(${notePosition}px)` }}
+                >
+                  <span
+                    className={`${styles.floatingNote} ${
+                      direction === "" ? styles.inTune : styles.outOfTune
+                    }`}
+                  >
+                    {currentNote}
+                  </span>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
-  
+
       <button onClick={startTuning} className={styles.startButton}>
         {isListening ? "Stop Tuning" : "Start Tuning"}
       </button>
-  
+
       {isListening && (
-        <AudioVisualizer
-          audioContext={audioContextRef.current}
-          analyzer={analyzerRef.current}
-        />
+        <div className={styles.audioVisualizerContainer}>
+          <AudioVisualizer
+            audioContext={audioContextRef.current}
+            analyzer={analyzerRef.current}
+          />
+        </div>
       )}
     </div>
   );
 };
 
-function getNoteFromFrequency(freq: number): { note: string; direction: string } {
+function getNoteFromFrequency(freq: number): {
+  note: string;
+  direction: string;
+} {
   if (freq < 20 || freq > 1200) {
     return { note: "--", direction: "" };
   }
-  const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  const notes = [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B",
+  ];
   const A4 = 440;
   const n = Math.round(12 * Math.log2(freq / A4));
   const closestNote = notes[(n + 69) % 12];
@@ -166,9 +209,9 @@ function getNoteFromFrequency(freq: number): { note: string; direction: string }
   const difference = freq - closestFreq;
 
   let direction = "";
-  if (difference < -1) {
+  if (difference < -0.5) {
     direction = "Tune Up ⬆️";
-  } else if (difference > 1) {
+  } else if (difference > 0.5) {
     direction = "Tune Down ⬇️";
   }
   return { note: closestNote, direction };

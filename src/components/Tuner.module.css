@@ -89,11 +89,25 @@
     justify-content: center; 
   }
 
-@keyframes vibrate {
-    0%   { transform: translateX(-3px); }
-    25%  { transform: translateX(3px); }
-    50%  { transform: translateX(-2px); }
-    75%  { transform: translateX(2px); }
+.string {
+    width: 2px;
+    height: 100px;
+    background: white;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+  }
+  
+  .vibrating {
+    animation: vibrate 0.2s infinite ease-in-out;
+  }
+  
+  .tuned {
+    background: #10b981; 
+    animation: none; 
+  }
+  
+  @keyframes vibrate {
+    0% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
     100% { transform: translateX(0px); }
   }
   
@@ -158,3 +172,35 @@
     margin-bottom: 1rem;
   }
   
+  .tunedGlow {
+    text-shadow: 0px 0px 10px #10b981; 
+    color: #10b981; 
+    font-weight: bold;
+    transition: text-shadow 0.3s ease-in-out;
+  }  
+
+  .pitchIndicatorContainer {
+    position: absolute;
+    bottom: 70px; 
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 12px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 2px solid #fff;
+    text-align: center;
+    font-size: 1rem;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  }
+  
+  
+  .inTuneContainer {
+    border-color: #10b981; 
+    background-color: rgba(16, 185, 129, 0.3); 
+  }
+  
+  .audioVisualizerContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }  

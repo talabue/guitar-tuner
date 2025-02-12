@@ -51,7 +51,7 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ audioContext, analyze
     drawWaveform();
   }, [audioContext, analyzer]);
 
-  return <canvas ref={canvasRef} width={200} height={300} className="waveformCanvas" />;
+  return <canvas ref={canvasRef} width={600} height={150} className="waveformCanvas" />;
 };
 
 export default AudioVisualizer;
